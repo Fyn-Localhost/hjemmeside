@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #1a4d6d 0%, #2d5f7a 100%);
@@ -10,26 +11,102 @@ body {
   padding: 40px 20px;
   color: white;
 }
+
 .header {
   text-align: center;
   margin-bottom: 40px;
 }
+
 .header h1 {
   font-size: 32px;
   font-weight: 400;
   color: #4dd0e1;
-  margin-bottom: 10px;
 }
-.header p {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.8);
-}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* GRID */
+.header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+/* Skjul normale checkbox */ 
+.custom-checkbox input { 
+    display: none; 
+} 
+
+/* Ydre form */ 
+.custom-checkbox .checkmark { 
+    width: 26px; 
+    height: 26px; 
+    border-radius: 6px; 
+    background: rgba(255,255,255,0.1); 
+    border: 1px solid rgba(77,208,225,0.4); 
+    display: inline-block; 
+    cursor: pointer; 
+    transition: 0.2s; 
+    position: relative; } 
+
+/* Hover-effekt (samme som page-btn hover) */ 
+.custom-checkbox:hover .checkmark { 
+    background: rgba(255,255,255,0.2); 
+} 
+
+/* Når den er valgt */ 
+.custom-checkbox input:checked + .checkmark { 
+    background: rgba(77,208,225,0.5); 
+    border-color: rgba(77,208,225,0.9); 
+} 
+
+/* Markér ✓ */ 
+.custom-checkbox input:checked + .checkmark::after { 
+    content: "✓"; 
+    color: white; 
+    font-size: 18px; 
+    position: absolute; 
+    left: 5px; top: 1px; 
+}
+
+/* Navigation */
+.page-nav {
+  justify-content: center;  
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.page-btn {
+  padding: 10px 18px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(77,208,225,0.4);
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.page-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.page-btn.active {
+  background: rgba(77,208,225,0.5);
+  border-color: rgba(77,208,225,0.9);
+}
+
+/* Pages */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+/* Items */
 .items-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -37,7 +114,6 @@ body {
   margin-bottom: 30px;
 }
 
-/* Item styling */
 .item {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(77, 208, 225, 0.3);
@@ -46,51 +122,71 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: all 0.3s ease;
+  transition: 0.3s ease;
 }
-.item:hover {
-  border-color: rgba(77, 208, 225, 0.6);
-  background: rgba(255, 255, 255, 0.08);
+
+.item-right {
+    display: flex;
+    flex-direction: row;   /* Stabler pris og input lodret */
+    align-items: center;       /* Centrerer begge dele */
+    gap: 0px;                  /* Lidt luft mellem pris og input */
 }
 
 .item-left {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 7px;
 }
+
 input[type="checkbox"] {
   width: 24px;
   height: 24px;
   cursor: pointer;
   accent-color: #4dd0e1;
 }
+
 .item-name {
   font-size: 16px;
   color: white;
 }
 
-.item-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
 .item-price {
-  font-size: 18px;
-  color: #4dd0e1;
-  font-weight: 500;
+  margin-right: -10px;
   min-width: 80px;
-  text-align: right;
+  text-align: center;
+  color: #4dd0e1;
+  font-size: 18px;
 }
 
-/* Quantity */
-.quantity-control {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  padding: 5px;
+/* Fjern pile i Chrome, Edge, Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
+
+/* Fjern pile i Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+
+/* Antal input */
+.qty-input {
+    height: 32px;
+    width: 40px;
+    padding: 6px 8px;
+    margin-left: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(77, 208, 225, 0.3);
+    border-radius: 6px;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    transition: 0.2s ease;
+}
+
+/* Når den er aktiv (checkbox slået til) */
 .qty-display {
   color: white;
   font-size: 16px;
@@ -119,48 +215,22 @@ input[type="checkbox"] {
   cursor: not-allowed;
 }
 
-/* Dropdown box */
-#tierDropdownBox select {
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(77, 208, 225, 0.4);
-  color: white;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-}
-#tierDropdownBox select option {
-  color: black;
-}
 
-/* Total box */
 .total-box {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(77, 208, 225, 0.3);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(77,208,225,0.3);
   border-radius: 8px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  text-align: center;
   max-width: 400px;
   margin: 0 auto;
-  transition: all 0.3s ease;
 }
-.total-box:hover {
-  border-color: rgba(77, 208, 225, 0.6);
-  background: rgba(255, 255, 255, 0.08);
-}
-.total-label {
-  font-size: 20px;
-  color: #4dd0e1;
-}
+
 .total-amount {
   font-size: 32px;
   font-weight: bold;
-  color: white;
 }
+
 .reset-btn {
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(77, 208, 225, 0.4);
@@ -175,11 +245,13 @@ input[type="checkbox"] {
   background: rgba(255, 255, 255, 0.25);
 }
 
+/* Responsive */
 @media (max-width: 1024px) {
   .items-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
 @media (max-width: 768px) {
   .items-grid {
     grid-template-columns: 1fr;
@@ -187,12 +259,7 @@ input[type="checkbox"] {
 }
 
 .footer {
-  color: #b0c4cf;
   text-align: center;
-  padding: 10px 0;
-  font-weight: 600;
-}
-
-.footer p {
-  margin: 0;
+  margin-top: 100px;
+  color: #b0c4cf;
 }
