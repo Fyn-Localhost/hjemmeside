@@ -7,25 +7,53 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <div class="container">
+
     <div class="header">
-      <h1>Auto Exotic Reparation</h1>
-      <p>Kryds af på de dele der skal bruges</p>
+      <h1>Fynboens Hjemmeside til Legacy RP Ting</h1>
+      <p>Vælg en kategori og brug den som du vil</p>
     </div>
 
-    <div class="items-grid" id="items"></div>
+    <!-- Navigation mellem sider -->
+    <div class="page-nav">
+        <button class="page-btn active" data-page="mekaniker">Auto Exotic Reparation</button>
+        <button class="page-btn" data-page="materialer">Materialer</button>
+        <button class="page-btn" data-page="ammo">Ammo</button>
+        <button class="page-btn" data-page="fiski">Fiski</button>
+    </div>
 
+    <!-- SIDEPANELER -->
+    <div class="page active" id="mekaniker">
+      <div class="items-grid" id="mekaniker-items"></div>
+    </div>
+
+    <div class="page" id="materialer">
+      <div class="items-grid" id="materialer-items"></div>
+    </div>
+
+    <div class="page" id="ammo">
+      <div class="items-grid" id="ammo-items"></div>
+    </div>
+
+    <div class="page" id="fiski">
+      <div class="items-grid" id="fiski-items"></div>
+    </div>
+
+    <!-- Total-box -->
     <div class="total-box">
       <div class="total-label">Samlet pris</div>
       <div class="total-amount" id="total">0 kr</div>
       <button id="resetBtn" class="reset-btn">Nulstil alt</button>
     </div>
+
   </div>
 
   <script src="script.js"></script>
+
+  <footer class="footer">
+    <p>© 2025 Fynboen25</p>
+  </footer>
+
 </body>
 </html>
-
-<footer class="footer">
-  <p>© 2025 Fynboen25</p>
-</footer>
