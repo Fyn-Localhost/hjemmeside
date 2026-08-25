@@ -1,167 +1,159 @@
-// DATA TIL HVER SIDE
-const mekanikerData = [
-  { name: "Diagnosticering", price: 1000 },
-  { name: "Topstykke", price: 450 },
-  { name: "Bundkar", price: 112 },
-  { name: "Krumtap", price: 600 },
-  { name: "Luftfilter", price: 37 },
-  { name: "Oliefilter", price: 30 },
-  { name: "Vandpumpe", price: 150 },
-  { name: "Pakningssæt", price: 187 },
-  { name: "Tandem", price: 90 },
-  { name: "Knastaksel", price: 375 },
-  { name: "Køler", price: 225 },
-  { name: "Ventilvippearme", price: 300 },
-  { name: "Tændrør", price: 375 },
-  { name: "Stempler", price: 187 },
-  { name: "Brændstofindsp", price: 150 },
-  { name: "Dæk & Fælg", price: 150 },
-  { name: "Bagklap & motorhjelm", price: 600 },
-  { name: "Bildør For & Bag", price: 600 },
-  { name: "Reserverdele tier A", price: 33750 },
-  { name: "Reserverdele tier B", price: 15625 },
-  { name: "Reserverdele tier C", price: 9375 },
-  { name: "Reserverdele tier D", price: 125 },
-  { name: "Reserverdele tier S", price: 84375 },
-  { name: "Kørsels Tillæg", price: 1000 }
-];
+document.addEventListener('DOMContentLoaded', () => {
 
-const materialerData = [
-  { name: "Fjederstål", price: 338 },
-  { name: "Smøremiddel Base", price: 90 },
-  { name: "Plastik", price: 675 },
-  { name: "Aluminium", price: 338 },
-  { name: "Gummi", price: 113 },
-  { name: "Bolte", price: 90 },
-  { name: "Skruer", price: 158 },
-  { name: "Ballistisk Stof", price: 113 },
-  { name: "Loddepakke", price: 338 },
-  { name: "Ledningsrulle", price: 675 },
-  { name: "Metalisk Skrot ", price: 90 },
-  { name: "Hærdet Stål", price: 338 },
-  { name: "Kredsløb", price: 158 },
-  { name: "Tekstil", price: 113 },
-  { name: "Klud", price: 113 },
-  { name: "Træ", price: 90 },
-  { name: "Aluminiumplade", price: 338 },
-  { name: "Lockpick", price: 158 },
-  { name: "Krudt", price: 113 },
-  { name: "Krudt (Høj ladning)", price: 113 },
-  { name: "Batteri Pakke", price: 90 },
-  { name: "Refineret Jern", price: 113 }
-];
+    // 1. SIDESKIFT LOGIK
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const actionButtons = document.querySelectorAll('.action-btn');
+    const pageSections = document.querySelectorAll('.page-section');
 
-const ammoData = [
-  { name: "Hylster 9mm", price: 555 },
-  { name: "Hylster Magnum", price: 90 },
-  { name: "Hylster .50 AE", price: 555 },
-  { name: "Hylster .45 ACP", price: 555 },
-  { name: "Kugle 9mm", price: 845 },
-  { name: "Kugle Magnum", price: 555 },
-  { name: "Kugle .50 AE", price: 555 },
-  { name: "Kugle .45 ACP", price: 113 }
-];
+    function switchPage(pageId) {
+        pageSections.forEach(section => section.classList.remove('active'));
+        navButtons.forEach(btn => btn.classList.remove('active'));
 
-const fiskiData = [
-  { name: "Laks", price: 338 },
-  { name: "Blåfinnet", price: 675 },
-  { name: "Sild", price: 90 },
-  { name: "Søtunge", price: 338 },
-  { name: "Rødspætte", price: 158 },
-  { name: "Ørrede", price: 113 },
-  { name: "Torsk", price: 113 },
-  { name: "Makrel", price: 90 }
-];
+        const activeSection = document.getElementById(pageId);
+        if (activeSection) {
+            activeSection.classList.add('active');
+        }
 
-// GENERER ITEMS AUTOMATISK
-function createItems(containerId, dataArray) {
-  const container = document.getElementById(containerId);
+        const activeNavBtn = document.querySelector(`.nav-btn[data-page="${pageId}"]`);
+        if (activeNavBtn) {
+            activeNavBtn.classList.add('active');
+        }
 
-  dataArray.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "item";
+        if (pageId === 'portfolio') {
+            const firstInputBtn = document.querySelector('.category-toggle');
+            if (firstInputBtn && !firstInputBtn.classList.contains('active')) {
+                firstInputBtn.click();
+            }
+        }
 
-    div.innerHTML = `
-      <div class="item-left">
-        <label class="custom-checkbox">
-            <input type="checkbox" class="item-check" data-price="${item.price}">
-            <span class="checkmark"></span>
-        </label>
-        <span class="item-name">${item.name}</span>
-      </div>
-
-      <div class="item-right">
-        <div class="item-price">${item.price} kr</div>
-        <input type="number" class="qty-input" value="1" min="1" disabled>
-      </div>
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-// Byg alle sider
-createItems("mekaniker-items", mekanikerData);
-createItems("materialer-items", materialerData);
-createItems("ammo-items", ammoData);
-createItems("fiski-items", fiskiData);
-
-// TOTAL-BEREGNING
-function updateTotal() {
-  let total = 0;
-
-  document.querySelectorAll(".item").forEach(item => {
-    const chk = item.querySelector(".item-check");
-    const qty = item.querySelector(".qty-input");
-
-    if (chk.checked) {
-      total += Number(chk.dataset.price) * Number(qty.value);
+        window.scrollTo(0, 0);
     }
-  });
 
-  document.getElementById("total").textContent = total + " kr";
-}
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => switchPage(button.getAttribute('data-page')));
+    });
 
-// AKTIVER/DEAKTIVER ANTAL + OPDATER TOTAL
-document.addEventListener("change", (e) => {
-  // Når checkbox vælges
-  if (e.target.classList.contains("item-check")) {
-    const item = e.target.closest(".item");
-    const qtyInput = item.querySelector(".qty-input");
+    actionButtons.forEach(button => {
+        button.addEventListener('click', () => switchPage(button.getAttribute('data-page')));
+    });
 
-    qtyInput.disabled = !e.target.checked;
+    // 2. PORTFOLIO KATEGORIER
+    const categoryButtons = document.querySelectorAll('.category-toggle');
+    const categoryContents = document.querySelectorAll('.category-content');
 
-    updateTotal();
-  }
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-target');
+            const targetCategory = document.getElementById(targetId);
 
-  // Når antal ændres
-  if (e.target.classList.contains("qty-input")) {
-    updateTotal();
-  }
-});
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            categoryContents.forEach(content => content.style.display = 'none');
 
-// RESET
-document.getElementById("resetBtn").addEventListener("click", () => {
-  document.querySelectorAll('.item-check').forEach(chk => chk.checked = false);
-  document.querySelectorAll('.qty-input').forEach(q => {
-    q.value = 1;
-    q.disabled = true;
-  });
-  updateTotal();
-});
+            button.classList.add('active');
+            targetCategory.style.display = 'block';
+        });
+    });
 
-// PAGE SWITCHING
-const pageButtons = document.querySelectorAll(".page-btn");
-const pages = document.querySelectorAll(".page");
+    // 3. MUSIKAFSPILER
+    const playButtons = document.querySelectorAll('.play-btn');
+    let currentAudio = null;
+    let currentButton = null;
 
-pageButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    pageButtons.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
+    playButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const trackPath = e.target.getAttribute('data-track');
+            
+            if (currentAudio && currentButton === e.target) {
+                currentAudio.pause();
+                currentAudio = null;
+                currentButton = null;
+                e.target.innerText = "Afspil Demo";
+                return;
+            }
 
-    const pageName = btn.dataset.page;
+            if (currentAudio) {
+                currentAudio.pause();
+                currentButton.innerText = "Afspil Demo";
+            }
 
-    pages.forEach(p => p.classList.remove("active"));
-    document.getElementById(pageName).classList.add("active");
-  });
+            currentAudio = new Audio(trackPath);
+            currentButton = e.target;
+
+            currentAudio.play()
+                .then(() => {
+                    e.target.innerText = "Stopper...";
+                })
+                .catch(error => {
+                    console.error("Lydfejl:", error);
+                    alert("Kunne ikke afspille lyden. Tjek om lydfilen ligger i din audio/ mappe.");
+                });
+
+            currentAudio.addEventListener('ended', () => {
+                e.target.innerText = "Afspil Demo";
+                currentAudio = null;
+                currentButton = null;
+            });
+        });
+    });
+
+    // 4. DISCORD WEBHOOK INTEGRATION
+    const orderForm = document.getElementById('orderForm');
+
+    orderForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // INDSÆT DIN DISCORD WEBHOOK URL HER
+        const discordWebhookUrl = "INDSÆT_DIN_DISCORD_WEBHOOK_URL_HER";
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const serviceSelect = document.getElementById('service');
+        const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text;
+        const description = document.getElementById('description').value;
+
+        const submitBtn = orderForm.querySelector('.submit-btn');
+        const originalBtnText = submitBtn.innerText;
+        submitBtn.innerText = "Sender...";
+        submitBtn.disabled = true;
+
+        const logoUrl = window.location.origin + "/img/logo.png";
+
+        const discordMessage = {
+            username: "King Productions - Bot",
+            avatar_url: logoUrl,
+            embeds: [{
+                title: "🎵 NY PROJEKTFORESPØRGSEL!",
+                color: 16777215,
+                fields: [
+                    { name: "👤 Kunde / Artist:", value: name, inline: true },
+                    { name: "📧 E-mail:", value: email, inline: true },
+                    { name: "🎛️ Ydelse ønsket:", value: serviceText, inline: false },
+                    { name: "📝 Projektbeskrivelse:", value: description, inline: false }
+                ],
+                footer: { text: "Modtaget via King Productions Mobil" },
+                timestamp: new Date().toISOString()
+            }]
+        };
+
+        fetch(discordWebhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(discordMessage)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert(`Mange tak for din henvendelse, ${name}!\n\nVi sender et udspil til ${email} hurtigst muligt.`);
+                orderForm.reset();
+            } else {
+                alert("Der skete en fejl. Tjek din webhook URL.");
+            }
+        })
+        .catch(error => {
+            alert("Kunne ikke oprette forbindelse. Prøv igen.");
+        })
+        .finally(() => {
+            submitBtn.innerText = originalBtnText;
+            submitBtn.disabled = false;
+        });
+    });
 });
