@@ -1,159 +1,223 @@
-document.addEventListener('DOMContentLoaded', () => {
+// ============================================
+// MUSIKSPILLER - JAVASCRIPT
+// ============================================
 
-    // 1. SIDESKIFT LOGIK
-    const navButtons = document.querySelectorAll('.nav-btn');
-    const actionButtons = document.querySelectorAll('.action-btn');
-    const pageSections = document.querySelectorAll('.page-section');
+// DOM Elements
+const audioPlayer = document.getElementById('audioPlayer');
+const playlist = document.getElementById('playlist');
+const currentSongTitle = document.getElementById('currentSong');
+const currentTimeEl = document.getElementById('currentTime');
+const durationEl = document.getElementById('duration');
+const progressBar = document.getElementById('progressBar');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const volumeSlider = document.getElementById('volumeSlider');
+const shareBtn = document.getElementById('shareBtn');
+const shareMessage = document.getElementById('shareMessage');
 
-    function switchPage(pageId) {
-        pageSections.forEach(section => section.classList.remove('active'));
-        navButtons.forEach(btn => btn.classList.remove('active'));
+// State
+let songs = [];
+let currentSongIndex = 0;
+let isPlaying = false;
 
-        const activeSection = document.getElementById(pageId);
-        if (activeSection) {
-            activeSection.classList.add('active');
-        }
+// ============================================
+// INDLÆS SANGE
+// ============================================
 
-        const activeNavBtn = document.querySelector(`.nav-btn[data-page="${pageId}"]`);
-        if (activeNavBtn) {
-            activeNavBtn.classList.add('active');
-        }
+// VIGTIG! Denne liste skal du udfylde manuelt med dine MP3-filer
+// Hvis du bruger en backend (Node.js/Express), kan den læse mappen automatisk
+const songFiles = [
+    { name: 'Hvert Evigt Sekund - Du mister mig aldrig', file: 'audio/Hvert_Evigt_Sekund _Du_Mister_Mig_Aldrig.mp3' },
+    { name: 'Hvert sekund uden dig', file: 'audio/Hvert_Sekund_Uden_Dig.mp3' },
+    { name: 'Mit hjerte slår for Julie', file: 'audio/Mit_Hjerte_Slår_For_Julie.mp3' },
+    { name: 'Vores Fremtid - Julie', file: 'audio/Vores_Fremtid_Julie.mp3' },
+    // Tilføj flere sange her
+];
 
-        if (pageId === 'portfolio') {
-            const firstInputBtn = document.querySelector('.category-toggle');
-            if (firstInputBtn && !firstInputBtn.classList.contains('active')) {
-                firstInputBtn.click();
-            }
-        }
-
-        window.scrollTo(0, 0);
+// Initialisering
+function init() {
+    songs = songFiles;
+    
+    // Tjek om der er en sang i URL (for delt link)
+    const params = new URLSearchParams(window.location.search);
+    const songIndex = parseInt(params.get('song'));
+    if (!isNaN(songIndex) && songIndex >= 0 && songIndex < songs.length) {
+        currentSongIndex = songIndex;
     }
+    
+    renderPlaylist();
+    loadSong(currentSongIndex);
+    updatePlaylist();
+}
 
-    navButtons.forEach(button => {
-        button.addEventListener('click', () => switchPage(button.getAttribute('data-page')));
-    });
+// ============================================
+// RENDER SANGLISTE
+// ============================================
 
-    actionButtons.forEach(button => {
-        button.addEventListener('click', () => switchPage(button.getAttribute('data-page')));
-    });
-
-    // 2. PORTFOLIO KATEGORIER
-    const categoryButtons = document.querySelectorAll('.category-toggle');
-    const categoryContents = document.querySelectorAll('.category-content');
-
-    categoryButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetId = button.getAttribute('data-target');
-            const targetCategory = document.getElementById(targetId);
-
-            categoryButtons.forEach(btn => btn.classList.remove('active'));
-            categoryContents.forEach(content => content.style.display = 'none');
-
-            button.classList.add('active');
-            targetCategory.style.display = 'block';
+function renderPlaylist() {
+    playlist.innerHTML = '';
+    songs.forEach((song, index) => {
+        const songItem = document.createElement('div');
+        songItem.className = 'song-item';
+        songItem.innerHTML = `<span class="song-name">${song.name}</span>`;
+        songItem.addEventListener('click', () => {
+            currentSongIndex = index;
+            loadSong(currentSongIndex);
+            play();
+            updatePlaylist();
         });
+        playlist.appendChild(songItem);
     });
+}
 
-    // 3. MUSIKAFSPILER
-    const playButtons = document.querySelectorAll('.play-btn');
-    let currentAudio = null;
-    let currentButton = null;
+// ============================================
+// INDLÆS SANG
+// ============================================
 
-    playButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            const trackPath = e.target.getAttribute('data-track');
-            
-            if (currentAudio && currentButton === e.target) {
-                currentAudio.pause();
-                currentAudio = null;
-                currentButton = null;
-                e.target.innerText = "Afspil Demo";
-                return;
-            }
+function loadSong(index) {
+    if (index < 0 || index >= songs.length) return;
+    
+    const song = songs[index];
+    audioPlayer.src = song.file;
+    currentSongTitle.textContent = song.name;
+    currentSongIndex = index;
+    updatePlaylist();
+}
 
-            if (currentAudio) {
-                currentAudio.pause();
-                currentButton.innerText = "Afspil Demo";
-            }
+// ============================================
+// AFSPILNING KONTROL
+// ============================================
 
-            currentAudio = new Audio(trackPath);
-            currentButton = e.target;
+function play() {
+    audioPlayer.play();
+    isPlaying = true;
+    playPauseBtn.textContent = '⏸️';
+}
 
-            currentAudio.play()
-                .then(() => {
-                    e.target.innerText = "Stopper...";
-                })
-                .catch(error => {
-                    console.error("Lydfejl:", error);
-                    alert("Kunne ikke afspille lyden. Tjek om lydfilen ligger i din audio/ mappe.");
-                });
+function pause() {
+    audioPlayer.pause();
+    isPlaying = false;
+    playPauseBtn.textContent = '▶️';
+}
 
-            currentAudio.addEventListener('ended', () => {
-                e.target.innerText = "Afspil Demo";
-                currentAudio = null;
-                currentButton = null;
-            });
-        });
-    });
+function togglePlayPause() {
+    if (isPlaying) {
+        pause();
+    } else {
+        play();
+    }
+}
 
-    // 4. DISCORD WEBHOOK INTEGRATION
-    const orderForm = document.getElementById('orderForm');
+function nextSong() {
+    currentSongIndex = (currentSongIndex + 1) % songs.length;
+    loadSong(currentSongIndex);
+    play();
+}
 
-    orderForm.addEventListener('submit', (e) => {
-        e.preventDefault();
+function prevSong() {
+    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    loadSong(currentSongIndex);
+    play();
+}
 
-        // INDSÆT DIN DISCORD WEBHOOK URL HER
-        const discordWebhookUrl = "INDSÆT_DIN_DISCORD_WEBHOOK_URL_HER";
+// ============================================
+// TIDSOPDATERING
+// ============================================
 
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const serviceSelect = document.getElementById('service');
-        const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text;
-        const description = document.getElementById('description').value;
+function formatTime(seconds) {
+    if (isNaN(seconds)) return '00:00';
+    
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
 
-        const submitBtn = orderForm.querySelector('.submit-btn');
-        const originalBtnText = submitBtn.innerText;
-        submitBtn.innerText = "Sender...";
-        submitBtn.disabled = true;
-
-        const logoUrl = window.location.origin + "/img/logo.png";
-
-        const discordMessage = {
-            username: "King Productions - Bot",
-            avatar_url: logoUrl,
-            embeds: [{
-                title: "🎵 NY PROJEKTFORESPØRGSEL!",
-                color: 16777215,
-                fields: [
-                    { name: "👤 Kunde / Artist:", value: name, inline: true },
-                    { name: "📧 E-mail:", value: email, inline: true },
-                    { name: "🎛️ Ydelse ønsket:", value: serviceText, inline: false },
-                    { name: "📝 Projektbeskrivelse:", value: description, inline: false }
-                ],
-                footer: { text: "Modtaget via King Productions Mobil" },
-                timestamp: new Date().toISOString()
-            }]
-        };
-
-        fetch(discordWebhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(discordMessage)
-        })
-        .then(response => {
-            if (response.ok) {
-                alert(`Mange tak for din henvendelse, ${name}!\n\nVi sender et udspil til ${email} hurtigst muligt.`);
-                orderForm.reset();
-            } else {
-                alert("Der skete en fejl. Tjek din webhook URL.");
-            }
-        })
-        .catch(error => {
-            alert("Kunne ikke oprette forbindelse. Prøv igen.");
-        })
-        .finally(() => {
-            submitBtn.innerText = originalBtnText;
-            submitBtn.disabled = false;
-        });
-    });
+audioPlayer.addEventListener('timeupdate', () => {
+    const { currentTime, duration } = audioPlayer;
+    
+    currentTimeEl.textContent = formatTime(currentTime);
+    durationEl.textContent = formatTime(duration);
+    
+    if (duration) {
+        progressBar.value = (currentTime / duration) * 100;
+    }
 });
+
+// Auto-play næste sang når denne slutter
+audioPlayer.addEventListener('ended', () => {
+    nextSong();
+});
+
+// ============================================
+// PROGRESS BAR
+// ============================================
+
+progressBar.addEventListener('change', (e) => {
+    const duration = audioPlayer.duration;
+    audioPlayer.currentTime = (e.target.value / 100) * duration;
+});
+
+// ============================================
+// VOLUME KONTROL
+// ============================================
+
+volumeSlider.addEventListener('input', (e) => {
+    audioPlayer.volume = e.target.value / 100;
+});
+
+// ============================================
+// DEL LINK
+// ============================================
+
+function copyShareLink() {
+    const songUrl = `${window.location.origin}${window.location.pathname}?song=${currentSongIndex}`;
+    
+    // Kopier til clipboard
+    navigator.clipboard.writeText(songUrl).then(() => {
+        shareMessage.textContent = '✓ Link kopieret!';
+        setTimeout(() => {
+            shareMessage.textContent = '';
+        }, 2000);
+    }).catch(() => {
+        // Fallback hvis clipboard ikke virker
+        alert('Link: ' + songUrl);
+    });
+}
+
+shareBtn.addEventListener('click', copyShareLink);
+
+// ============================================
+// EVENT LISTENERS
+// ============================================
+
+playPauseBtn.addEventListener('click', togglePlayPause);
+prevBtn.addEventListener('click', prevSong);
+nextBtn.addEventListener('click', nextSong);
+
+// ============================================
+// OPDATER SANGLISTE STYLING
+// ============================================
+
+function updatePlaylist() {
+    const items = playlist.querySelectorAll('.song-item');
+    items.forEach((item, index) => {
+        if (index === currentSongIndex) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+}
+
+// ============================================
+// START
+// ============================================
+
+init();
+
+// Sæt default volume
+audioPlayer.volume = 1.0;
+
+console.log('🎵 Musikspiller indlæst!');
+console.log(`📁 ${songs.length} sang(e) fundet`);
