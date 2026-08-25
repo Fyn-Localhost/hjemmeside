@@ -1,59 +1,134 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Oversigt Legacy RP</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>King Productions</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="container">
+    <!-- Navigation -->
+    <header>
+        <div class="logo">KING PRODUCTIONS</div>
+        <nav>
+            <ul>
+                <li><button class="nav-btn active" data-page="hjem">Hjem</button></li>
+                <li><button class="nav-btn" data-page="portfolio">Portfolio</button></li>
+                <li><button class="nav-btn" data-page="bestil">Bestil</button></li>
+            </ul>
+        </nav>
+    </header>
 
-    <div class="header">
-      <h1>Fynboens Hjemmeside til Legacy RP Ting</h1>
-      <p>Vælg en kategori og brug den som du vil</p>
-    </div>
+    <!-- Hjem / Velkomst sektion -->
+    <section id="hjem" class="page-section active">
+        <div class="hero-content">
+            <h1>Premium Music Production</h1>
+            <p>Vi skaber skræddersyede lyduniverser, professionelle beats og high-end mix/mastering til artister og medier.</p>
+            <div class="hero-btns">
+                <button class="btn action-btn" data-page="portfolio">Se Portfolio</button>
+                <button class="btn secondary-btn action-btn" data-page="bestil">Start projekt</button>
+            </div>
+        </div>
+    </section>
 
-    <!-- Navigation mellem sider -->
-    <div class="page-nav">
-        <button class="page-btn active" data-page="mekaniker">Auto Exotic Reparation</button>
-        <button class="page-btn" data-page="materialer">Materialer</button>
-        <button class="page-btn" data-page="ammo">Ammo</button>
-        <button class="page-btn" data-page="fiski">Fiski</button>
-    </div>
+    <!-- Portfolio Sektion -->
+    <section id="portfolio" class="page-section">
+        <div class="section-container">
+            <h2>Vores Produktioner</h2>
+            <p class="section-subtitle">Vælg en kategori for at lytte til udvalgte demos.</p>
+            
+            <div class="category-selectors">
+                <button class="category-toggle" data-target="pop-cat">Pop &amp; Kommercielt</button>
+                <button class="category-toggle" data-target="hiphop-cat">Hip Hop &amp; Trap</button>
+                <button class="category-toggle" data-target="cinematic-cat">Cinematic</button>
+            </div>
 
-    <!-- SIDEPANELER -->
-    <div class="page active" id="mekaniker">
-      <div class="items-grid" id="mekaniker-items"></div>
-    </div>
+            <!-- Kategori 1: Pop -->
+            <div id="pop-cat" class="category-content">
+                <div class="music-grid">
+                    <div class="music-card">
+                        <img src="img/pop1.jpg" alt="Production 1" onerror="this.src='https://picsum.photos/300/300?random=1'">
+                        <h4>Chasing Daylight</h4>
+                        <p>Fuld produktion &amp; Mix</p>
+                        <button class="play-btn" data-track="audio/sommernat.mp3">Afspil Demo</button>
+                    </div>
+                    <div class="music-card">
+                        <img src="img/pop2.jpg" alt="Production 2" onerror="this.src='https://picsum.photos/300/300?random=2'">
+                        <h4>Neon Hearts</h4>
+                        <p>Co-production &amp; Mastering</p>
+                        <button class="play-btn" data-track="audio/ekkodalen.mp3">Afspil Demo</button>
+                    </div>
+                </div>
+            </div>
 
-    <div class="page" id="materialer">
-      <div class="items-grid" id="materialer-items"></div>
-    </div>
+            <!-- Kategori 2: Hip Hop -->
+            <div id="hiphop-cat" class="category-content">
+                <div class="music-grid">
+                    <div class="music-card">
+                        <img src="img/hiphop1.jpg" alt="Production 3" onerror="this.src='https://picsum.photos/300/300?random=3'">
+                        <h4>Grit &amp; Grind</h4>
+                        <p>Beat Lease / Produktion</p>
+                        <button class="play-btn" data-track="audio/midnight_drive.mp3">Afspil Demo</button>
+                    </div>
+                </div>
+            </div>
 
-    <div class="page" id="ammo">
-      <div class="items-grid" id="ammo-items"></div>
-    </div>
+            <!-- Kategori 3: Cinematic -->
+            <div id="cinematic-cat" class="category-content">
+                <div class="music-grid">
+                    <div class="music-card">
+                        <img src="img/cinema1.jpg" alt="Production 4" onerror="this.src='https://picsum.photos/300/300?random=4'">
+                        <h4>The Last Frontier</h4>
+                        <p>Komposition til Film</p>
+                        <button class="play-btn" data-track="audio/cinema.mp3">Afspil Demo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div class="page" id="fiski">
-      <div class="items-grid" id="fiski-items"></div>
-    </div>
+    <!-- Bestillingssektion -->
+    <section id="bestil" class="page-section">
+        <div class="order-container">
+            <h2>Start en produktion</h2>
+            <p>Fortæl os om dit projekt, så vender vi tilbage med et oplæg.</p>
+            
+            <form id="orderForm">
+                <div class="form-group">
+                    <label for="name">Navn / Artist Navn</label>
+                    <input type="text" id="name" required placeholder="Dit navn eller kunstnernavn">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mailadresse</label>
+                    <input type="email" id="email" required placeholder="din@email.dk">
+                </div>
+                
+                <div class="form-group">
+                    <label for="service">Ydelse</label>
+                    <select id="service">
+                        <option value="fuld-produktion">Fuld Musikproduktion</option>
+                        <option value="beat">Eksisterende Beat / Instrumental</option>
+                        <option value="mix-master">Kun Mix &amp; Mastering</option>
+                        <option value="andet">Andet (Filmlyd, podcast, mv.)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Projektbeskrivelse</label>
+                    <textarea id="description" rows="3" required placeholder="Beskriv din vision og referencer..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn submit-btn">Send forespørgsel</button>
+            </form>
+        </div>
+    </section>
 
-    <!-- Total-box -->
-    <div class="total-box">
-      <div class="total-label">Samlet pris</div>
-      <div class="total-amount" id="total">0 kr</div>
-      <button id="resetBtn" class="reset-btn">Nulstil alt</button>
-    </div>
+    <footer>
+        <p>&copy; 2026 King Productions</p>
+    </footer>
 
-  </div>
-
-  <script src="script.js"></script>
-
-  <footer class="footer">
-    <p>© 2025 Fynboen25</p>
-  </footer>
-
+    <script src="script.js"></script>
 </body>
 </html>
