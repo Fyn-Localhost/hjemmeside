@@ -13,8 +13,6 @@ const playPauseBtn = document.getElementById('playPauseBtn');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const volumeSlider = document.getElementById('volumeSlider');
-const shareBtn = document.getElementById('shareBtn');
-const shareMessage = document.getElementById('shareMessage');
 
 // State
 let songs = [];
@@ -38,13 +36,6 @@ const songFiles = [
 // Initialisering
 function init() {
     songs = songFiles;
-    
-    // Tjek om der er en sang i URL (for delt link)
-    const params = new URLSearchParams(window.location.search);
-    const songIndex = parseInt(params.get('song'));
-    if (!isNaN(songIndex) && songIndex >= 0 && songIndex < songs.length) {
-        currentSongIndex = songIndex;
-    }
     
     renderPlaylist();
     loadSong(currentSongIndex);
@@ -165,27 +156,6 @@ progressBar.addEventListener('change', (e) => {
 volumeSlider.addEventListener('input', (e) => {
     audioPlayer.volume = e.target.value / 100;
 });
-
-// ============================================
-// DEL LINK
-// ============================================
-
-function copyShareLink() {
-    const songUrl = `${window.location.origin}${window.location.pathname}?song=${currentSongIndex}`;
-    
-    // Kopier til clipboard
-    navigator.clipboard.writeText(songUrl).then(() => {
-        shareMessage.textContent = '✓ Link kopieret!';
-        setTimeout(() => {
-            shareMessage.textContent = '';
-        }, 2000);
-    }).catch(() => {
-        // Fallback hvis clipboard ikke virker
-        alert('Link: ' + songUrl);
-    });
-}
-
-shareBtn.addEventListener('click', copyShareLink);
 
 // ============================================
 // EVENT LISTENERS
