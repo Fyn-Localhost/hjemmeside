@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Til Julie · Fra mig til dig</title>
+    <title>Musikspiller</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main class="container">
+    <div class="container">
         <!-- Header -->
         <header class="header">
-            <p class="eyebrow">FRA MIG TIL DIG</p><h1 class="signature">Din Tobias</h1>
+            <h1>🎵 Julies personlige playliste 🎵</h1>
         </header>
 
         <!-- Player -->
@@ -30,7 +30,7 @@
             <div class="progress-container">
                 <input 
                     type="range" 
-                    aria-label="Placering i sangen" id="progressBar" 
+                    id="progressBar" 
                     class="progress-bar" 
                     value="0" 
                     min="0" 
@@ -41,9 +41,9 @@
 
             <!-- Controls -->
             <div class="controls">
-                <button aria-label="Forrige sang" id="prevBtn" class="control-btn">⏮️</button>
-                <button aria-label="Afspil" id="playPauseBtn" class="control-btn play-btn">▶️</button>
-                <button aria-label="Næste sang" id="nextBtn" class="control-btn">⏭️</button>
+                <button id="prevBtn" class="control-btn">⏮️</button>
+                <button id="playPauseBtn" class="control-btn play-btn">▶️</button>
+                <button id="nextBtn" class="control-btn">⏭️</button>
             </div>
 
             <!-- Volume -->
@@ -51,7 +51,7 @@
                 <label for="volumeSlider">🔊</label>
                 <input 
                     type="range" 
-                    aria-label="Lydstyrke" id="volumeSlider" 
+                    id="volumeSlider" 
                     class="volume-slider" 
                     value="100" 
                     min="0" 
@@ -62,16 +62,16 @@
 
         <!-- Playlist -->
         <section class="playlist-section">
-            <h3>Sange til dig</h3><p class="playlist-intro">Tryk på en sang, og lad mig være lidt tættere på.</p>
+            <h3>Sange</h3>
             <div id="playlist" class="playlist">
                 <!-- Sange bliver tilføjet af JavaScript -->
             </div>
         </section>
-        <p id="playerStatus" role="status" class="player-status"></p><footer>Lavet med kærlighed, kun til dig ♡</footer></main><!-- Hidden audio element -->
+    </div>
+
+    <!-- Hidden audio element -->
     <audio id="audioPlayer"></audio>
 
     <script src="script.js"></script>
 </body>
 </html>
-
-
