@@ -32,6 +32,12 @@ const songFiles = [
     { name: 'Vores Fremtid - Julie', file: 'audio/Vores_Fremtid_Julie.mp3' },
     { name: 'På den anden side broen', file: 'audio/På_den_anden_side_af_broen.mp3' },
     { name: 'Ingen bro er for lang', file: 'audio/Ingen_Bro_Er_For_Lang.mp3' },
+    { name: 'Stille strøm - Julie', file: 'audio/Stille_strøm_julie.mp3' },
+    { name: 'Mit Anker - Julie', file: 'audio/Mit_Anker_Julie.mp3' },
+    { name: 'Lige Her Med Dig', file: 'audio/Lige_Her_Med_Dig.mp3' },
+    { name: 'Jeg Har Lovet Dig', file: 'audio/Jeg_Har_Lovet_Dig.mp3' },
+    { name: 'Hey Julie', file: 'audio/Hey_Julie.mp3' },
+    { name: 'Du Væltede Min Verden', file: 'audio/Du_Væltede_Min_Verden.mp3' },
     // Tilføj flere sange her
 ];
 
