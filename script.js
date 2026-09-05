@@ -51,9 +51,10 @@ function init() {
 function renderPlaylist() {
     playlist.innerHTML = '';
     songs.forEach((song, index) => {
-        const songItem = document.createElement('div');
+        const songItem = document.createElement('button');
+        songItem.type = 'button';
         songItem.className = 'song-item';
-        songItem.innerHTML = `<span class="song-name">${song.name}</span>`;
+        songItem.innerHTML = `<span class="song-number" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span><span class="song-name">${song.name}</span>`;
         songItem.addEventListener('click', () => {
             currentSongIndex = index;
             loadSong(currentSongIndex);
@@ -72,6 +73,10 @@ function loadSong(index) {
     if (index < 0 || index >= songs.length) return;
     
     const song = songs[index];
+    progressBar.value = 0;
+    currentTimeEl.textContent = '00:00';
+    durationEl.textContent = '00:00';
+    document.getElementById('playerStatus').textContent = '';
     audioPlayer.src = song.file;
     currentSongTitle.textContent = song.name;
     currentSongIndex = index;
@@ -82,11 +87,30 @@ function loadSong(index) {
 // AFSPILNING KONTROL
 // ============================================
 
-function play() {
-    audioPlayer.play();
-    isPlaying = true;
-    playPauseBtn.textContent = '⏸️';
+async function play() {
+    try {
+        await audioPlayer.play();
+        document.getElementById('playerStatus').textContent = '';
+    } catch (error) {
+        if (error.name !== 'AbortError') {
+            document.getElementById('playerStatus').textContent = 'Sangen kunne ikke afspilles. Prøv igen eller vælg en anden sang.';
+        }
+    }
 }
+function syncPlaybackState() {
+    isPlaying = !audioPlayer.paused;
+    playPauseBtn.textContent = isPlaying ? '⏸️' : '▶️';
+    playPauseBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Afspil');
+    document.body.classList.toggle('is-playing', isPlaying);
+}
+audioPlayer.addEventListener('play', syncPlaybackState);
+audioPlayer.addEventListener('pause', syncPlaybackState);
+audioPlayer.addEventListener('error', () => {
+    document.getElementById('playerStatus').textContent = 'Sangen kunne ikke indlæses. Prøv en anden sang.';
+});
+audioPlayer.addEventListener('loadedmetadata', () => {
+    durationEl.textContent = formatTime(audioPlayer.duration);
+});
 
 function pause() {
     audioPlayer.pause();
@@ -119,7 +143,7 @@ function prevSong() {
 // ============================================
 
 function formatTime(seconds) {
-    if (isNaN(seconds)) return '00:00';
+    if (!Number.isFinite(seconds)) return '00:00';
     
     const minutes = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
@@ -148,7 +172,7 @@ audioPlayer.addEventListener('ended', () => {
 
 progressBar.addEventListener('change', (e) => {
     const duration = audioPlayer.duration;
-    audioPlayer.currentTime = (e.target.value / 100) * duration;
+    if (Number.isFinite(duration) && duration > 0) audioPlayer.currentTime = (e.target.value / 100) * duration;
 });
 
 // ============================================
@@ -176,8 +200,10 @@ function updatePlaylist() {
     items.forEach((item, index) => {
         if (index === currentSongIndex) {
             item.classList.add('active');
+            item.setAttribute('aria-current', 'true');
         } else {
             item.classList.remove('active');
+            item.removeAttribute('aria-current');
         }
     });
 }
@@ -193,3 +219,5 @@ audioPlayer.volume = 1.0;
 
 console.log('🎵 Musikspiller indlæst!');
 console.log(`📁 ${songs.length} sang(e) fundet`);
+
+
