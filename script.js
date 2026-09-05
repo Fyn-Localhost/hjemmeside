@@ -30,6 +30,8 @@ const songFiles = [
     { name: 'Hvert sekund uden dig', file: 'audio/Hvert_Sekund_Uden_Dig.mp3' },
     { name: 'Mit hjerte slår for Julie', file: 'audio/Mit_Hjerte_Slår_For_Julie.mp3' },
     { name: 'Vores Fremtid - Julie', file: 'audio/Vores_Fremtid_Julie.mp3' },
+    { name: 'På den anden side broen', file: 'audio/På_den_anden_side_af_broen.mp3' },
+    { name: 'Ingen bro er for lang', file: 'audio/Ingen_Bro_Er_For_Lang.mp3' },
     // Tilføj flere sange her
 ];
 
